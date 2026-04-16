@@ -1,0 +1,32 @@
+.wrapper {
+  /* This is defined in styles.scss, and is based on the .rating--[level] class
+     applied in the template */
+  --accent-color: var(--rating-text-color);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #fff;
+  border-radius: var(--border-radius);
+  border: var(--border);
+  padding: 18px 20px;
+  margin-bottom: 20px;
+}
+
+/* Align the icon with first line of text */
+.wrapper { --line-height: 1.5; }
+svg      { height: calc(1em * var(--line-height)); }
+p        { line-height: var(--line-height); }
+
+svg {
+  color: var(--accent-color);
+  flex-shrink: 0;
+
+  & circle,
+  & path {
+    stroke: currentColor;
+  }
+}
+
+p {
+  color: var(--text-light);
+}

@@ -1,0 +1,131 @@
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+//@use "variables" as *;
+/**
+ * Map getters
+ *
+ */
+
+@function get-zindex($val) {
+  $zindexes: (
+    "colored-shadow": -1,
+  );
+
+  @return map.get($zindexes, $val);
+}
+
+@function get-shadow($shadow) {
+  $shadows: (
+  );
+  @return map.get($shadows, $val);
+}
+
+@function get-border($border) {
+  $borders: (
+  );
+  @return map.get($border, $val);
+}
+
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}
+
+@function rem($px){
+  $root-font-size: 16 !default;
+  @if not math.is-unitless($px) {
+    $px: math.div($px,1px);
+  }
+  $results: math.div($px, $root-font-size);
+
+  @return $results*1rem;
+}
+
+@function px($rem){
+  $root-font-size: 16 !default;
+  @if not math.is-unitless($rem) {
+    $rem: math.div($rem, 1rem);
+  }
+  $results: $rem * $root-font-size;
+
+  @return $results*1px;
+}
+
+
+/**
+ * Get the additive inverse of a number.
+ * Split into pos() and neg() functions for better readability and debugging.
+ */
+@function neg($val) {
+  @if ($val < 0) {
+    @warn("Called neg(#{$val}) but value is aleady negative");
+    @return $val;
+  }
+  @return inverse($val);
+}
+
+@function pos($val) {
+  @if ($val > 0) {
+    @warn("Called pos(#{$val}) but value is aleady positive");
+    @return $val;
+  }
+  @return inverse($val);
+}
+
+@function inverse($val) {
+  @return $val * -1;
+};
+
+
+// takes a hex code string, and a number 0-100 representing the desired
+// alpha channel/opacity value. Converts the percentge value to the hexidecimal
+// equivalent and returns the RGBA hexadecimal notation
+@function hexa($hex, $alphaPercent:100){
+  $alphaByte: floor(($alphaPercent * .01) * 255);
+  $hexDigits: (10: "a", 11: "b", 12: "c", 13: "d", 14: "e", 15: "f", 16: 0);
+
+  $quotient-1: floor(math.div($alphaByte, 16));
+  $remainer: $alphaByte % 16;
+
+  @if $quotient-1 == 0 {
+      $second: if($remainer < 10, $remainer, map.get($hexDigits, $remainer));
+      @return #{$hex}#{$quotient-1}#{$second};
+  } @else {
+      $quotient-2: floor(math.div($quotient-1, 16));
+      $remainder-2: $quotient-1 % 16;
+      $dig-1: if($remainder-2 < 10, $remainder-2, map.get($hexDigits, $remainder-2));
+      $dig-2: if($remainer < 11, $remainer, map.get($hexDigits, $remainer));
+      @return #{$hex}#{$dig-1}#{$dig-2};
+  }
+}
+
+/// Native `url(..)` function wrapper
+/// @param {String} $base - base URL for the asset
+/// @param {String} $type - asset type folder (e.g. `fonts/`)
+/// @param {String} $path - asset path
+/// @return {Url}
+@function asset($base, $type, $path) {
+  @return url($base + $type + $path);
+}
+
+/// Returns URL to an image based on its path
+/// @param {String} $path - image path
+/// @param {String} $base [$base-url] - base URL
+/// @return {Url}
+/// @require $base-url
+@function image($path, $base: $base-url) {
+  @return asset($base, 'images/', $path);
+}
+
+/// Returns URL to a font based on its path
+/// @param {String} $path - font path
+/// @param {String} $base [$base-url] - base URL
+/// @return {Url}
+/// @require $base-url
+@function font($path, $base: $base-url) {
+  @return asset($base, 'fonts/', $path);
+}

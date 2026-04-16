@@ -1,0 +1,8 @@
+@if ( currentIntensity$ | async; as current ) {
+  <p class="rating-header">The current rating is</p>
+    <span class="rating rating--{{ current.index | kebabCase}}">{{ current.index | titlecase }}</span>
+    <div class="value-row">
+      <span class="value">{{ current.value }}</span>
+        <span class="unit">gCO2/kWh</span>
+    </div>
+}

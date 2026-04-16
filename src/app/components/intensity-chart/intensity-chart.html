@@ -1,0 +1,10 @@
+@if (graphSeries$ | async) {
+  @if (loading$ | async; as loading) {
+  <div class="chart-loading" aria-live="polite">Loading chart…</div>
+}
+@if (options$ | async; as options ) {
+   <span class="chart-title">48-hour overview</span>
+<app-line-chart [options]="options"
+  class="demo-chart" [class.is-loading]="(loading$|async) === true"></app-line-chart>
+}
+}

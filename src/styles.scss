@@ -1,0 +1,111 @@
+/* You can add global styles to this file, and also import other style files */
+//Abstracts
+@use 'scss/abstracts' as *;
+@use 'scss/base' as *;
+
+:root {
+  --content-max-width: 440px;
+  --line-max-width: 40rem;
+  --body-font-family: "Mulish";
+  --title-font-family: "YoungSerif-Bold";
+
+  --space-xl: 50px;
+  --space-xxl: 120px;
+  --space-section: 36px;
+
+  /* UI colors match src\app\constants\colors.constants.ts
+     Text versions of colours maintain at least a 4.5:1 contrast
+      - Tested against --list-active-color: #e9e9e9; (darker that bg colour)
+     UI colours should have min contrast of 3:1 */
+  --rating-moderate-text:#a55300; //#AF5800;
+  --rating-moderate-ui: #DD6D00;
+  --rating-high-text:#b83b56; //#a93048;// #AF272C;
+  --rating-high-ui: #AF272C;
+  --rating-very-high-text: #a14793;
+  --rating-very-high-ui: #A84A9A;
+  --rating-low-text: #03713c;
+  --rating-low-ui: #03713c;
+  --rating-very-low-text: #0066CC;
+  --rating-very-low-ui: #0066CC;
+
+  --rating-text-color: ;
+
+  --color-charcoal: #121212;
+
+  --green: #03713c;
+  --bg-color: #f4f3ee;
+  --list-active-color: #e9e9e9;
+  --text: #18190F;
+  --text-light: #303027;
+  --text-lighter: #4f4f41;
+  --text-lightest: #66645a;
+  --ui:#868376; //#7c796d;
+  --rating-font-weight: 900;
+  --mono-font: 'Fragment Mono';
+
+  --font-color: var(--color-charcoal);
+  --font-size-xxl: 73px;
+  --font-size-xl: 36px;
+  --font-size-m: 15px;
+  --font-size-s: 14px;
+  --font-size-xs: 13px;
+  --font-size-xxs: 12px;
+
+  --letter-spacing-header: .18em;
+
+
+  --border-color: #eae9e2;
+  --border: 1px solid var(--border-color);
+  --border-radius: 12px;
+  --box-shadow: 0 10px 36px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.04);
+
+  --page-padding: 15px 16px 72px;
+
+  @include at-small {
+    --page-padding: 30px 28px 72px;
+    --font-size-xxl: 88px;
+    --rating-font-weight: 400;
+    --space-xxl: 130px;
+    --space-xl: 50px;
+  }
+
+  :has(.rating--very-low) { --rating-text-color: var(--rating-very-low-text); }
+  :has(.rating--low)      { --rating-text-color: var(--rating-low-text);      }
+  :has(.rating--moderate) { --rating-text-color: var(--rating-moderate-text); }
+  :has(.rating--high)     { --rating-text-color: var(--rating-high-text);     }
+  :has(.rating--very-high){ --rating-text-color: var(--rating-very-high-text);}
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  min-height: 100vh;
+  background: var(--bg-color);
+  padding: var(--page-padding);
+  font-family: var(--body-font-family);
+  color: var(--text);
+  font-weight: 400;
+}
+
+h1 {
+  font-weight: 400;
+  font-size: var(--font-size-xxs);
+  text-transform: uppercase;
+  color: var(--text-lightest);
+  letter-spacing: var(--letter-spacing-header);
+}
+
+.big-screens-only {
+  display: none;
+
+  @mixin at-small {
+    display: block;
+  }
+}
+
+.small-screens-only {
+  display: block;
+
+  @mixin at-small {
+    display: none;
+  }
+}

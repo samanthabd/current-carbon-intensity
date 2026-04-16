@@ -1,0 +1,32 @@
+.rating-header {
+  color: var(--text-lighter);
+  letter-spacing: .03em;
+  font-size: var(--font-size-m);
+  margin-block-end: 8px
+}
+
+.rating {
+  font-size: var(--font-size-xxl);
+  font-family: var(--title-font-family);
+  font-weight: var(--rating-font-weight);
+
+  /* This is defined in styles.scss, and is based on the .rating--[level] class
+     applied in the template */
+  color: var(--rating-text-color);
+}
+
+.value-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.value {
+  font-size: var(--font-size-xl);
+}
+
+.unit {
+  font-size: var(--font-size-xxs);
+  color: var(--text-lighter);
+  font-weight: 400;
+}

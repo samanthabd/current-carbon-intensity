@@ -1,0 +1,10 @@
+
+@if (hasError$ | async; as data ) {
+  <div class="error-message">
+    <p>Problem loading data. Try refreshing page.</p>
+  </div>
+} @else {
+  <app-current-rating></app-current-rating>
+  <app-next-intensity-shift></app-next-intensity-shift>
+  <app-intensity-chart></app-intensity-chart>
+}
