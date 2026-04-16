@@ -1,0 +1,34 @@
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+}
+
+.main-wrapper {
+  margin-block-start: var(--space-xxl);
+}
+
+header {
+  display: grid;
+  width: 100%;
+  gap: 16px;
+  justify-content: space-between;
+
+  /* Prevent title from wrapping when region name is long */
+  grid-template-columns: auto max-content;
+
+  /* Keeps the title aligned with the combobox if the region text wraps */
+  align-items: flex-end;
+  min-height: calc(1em * 2.2);
+  :where(&) h1 {
+    margin-block-end: 1px;
+  }
+}
+
+h1 {
+  margin-inline-start: auto;
+}
+

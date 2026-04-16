@@ -1,0 +1,286 @@
+@use "functions" as *;
+@use "sass:meta";
+@use "sass:map";
+@use "sass:math";
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass mixins.
+// -----------------------------------------------------------------------------
+/**
+ * 1. Accessibility
+ * States
+ * Borders and shadows
+ */
+
+
+
+/* ------------------------------ ACCESSIBILITY ----------------------------- */
+
+@mixin card($bg: $card-bg, $bs: $card-box-shadow) {
+  box-shadow: $card-box-shadow;
+  background-color: $card-bg;
+  border-radius: $border-radius;
+}
+
+/// Makes an element invisible and effectively removes it from the layout flow,
+/// while preserving it in the DOM and accessibility tree.
+/// It is considered an anti-pattern for an invisible element to receive
+/// keyboard focus.
+///
+/// @link https://www.w3.org/WAI/WCAG21/Understanding/focus-visible.html
+///
+/// @param {boolean} $focusable [true] - allow element to become visible on focus or when active.
+@mixin visually-hidden($focusable: true) {
+  $selector: null;
+
+  @if $focusable {
+    $selector: ":not(:focus):not(:active)";
+  }
+
+  &#{$selector} {
+    position: absolute !important;
+    margin: -1px !important;
+    border: 0 !important;
+    padding: 0 !important;
+    width: 1px !important;
+    height: 1px !important;
+    clip: rect(0 0 0 0) !important;
+    clip-path: inset(50%) !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+  }
+}
+
+
+@mixin no-motion-preference{
+  @media (prefers-reduced-motion: no-preference) {
+      @content;
+  }
+}
+
+
+
+/* --------------------------------- STATES --------------------------------- */
+
+@mixin default-focus-styles {
+  outline: -webkit-focus-ring-color;
+  outline: auto;
+}
+
+
+@mixin hocus {
+  &:hover,
+  &:focus-visible {
+    @content;
+  }
+}
+
+
+
+
+/* --------------------------- BORDERS AND SHADOWS -------------------------- */
+/* *
+ * Converting to css custom properties means we can easily test different
+ * values in dev tools!
+ */
+@mixin shadowBorder($color, $size, $blur: $size) {
+  --size: #{$size};
+  --neg-size: #{neg($size)};
+  --color: #{$color};
+  --blur: #{$blur};
+
+  box-shadow: 0 0 var(--blur) var(--color),
+              0 var(--size) var(--blur) var(--color),
+              0 var(--neg-size) var(--blur) var(--color),
+              var(--size) 0 var(--blur) var(--color),
+              var(--size) var(--size) var(--blur) var(--color),
+              var(--size) var(--neg-size) var(--blur) var(--color),
+              var(--neg-size) 0 var(--blur) var(--color),
+              var(--neg-size) var(--size) var(--blur) var(--color),
+              var(--neg-size) var(--neg-size) var(--blur) var(--color) ;
+}
+
+
+@mixin colored-shadow($bg: inherit, $blur: 6px, $opacity: .5) {
+  $z-index: -2;
+  @if (function-exists(get-zindex) and get-zindex(colored-shadow)) {
+     $z-index: get-zindex(colored-shadow);
+  }
+  &:after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: $bg;
+    top: 10px;
+    left: 10px;
+    filter: blur($blur);
+    opacity: $opacity;
+    z-index: $z-index;
+    @content;
+  }
+}
+
+/**
+ * Adds a shadow to the top and bottom of a container indicating that it is
+ * scrollable. At each end, the shadow disappears when there is no more content
+ * to scroll.
+ *
+ * Due to the stacking context, content in the scrollable container will appear
+ * over the scroll shadow and can disrupt the look. Adjusting the opacity of
+ * background/border colours for inner content can preserve the shadow. For
+ * some types of content (eg images) overlap is unavoidable.
+ *
+ * https://css-tricks.com/books/greatest-css-tricks/scroll-shadows/
+ */
+@mixin scroll-shadows {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+
+  background:
+    /* Shadow Cover TOP */
+    linear-gradient(
+      white 30%,
+      rgba(255, 255, 255, 0)
+    ) center top,
+
+    /* Shadow Cover BOTTOM */
+    linear-gradient(
+      rgba(255, 255, 255, 0),
+      white 70%
+    ) center bottom,
+
+    /* Shadow TOP */
+    radial-gradient(
+      farthest-side at 50% 0,
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0)
+    ) center top,
+
+    /* Shadow BOTTOM */
+    radial-gradient(
+      farthest-side at 50% 100%,
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0)
+    ) center bottom;
+
+  background: linear-gradient(white 30%, rgba(255, 255, 255, 0)) center top, linear-gradient(rgba(255, 255, 255, 0), white 70%) center bottom, linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) center top, linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.1)) center bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  background-size: 100% 40px, 100% 40px, 100% 10px, 100% 10px;
+  background-attachment: local, local, scroll, scroll;
+}
+
+
+
+/* ------------------------------- BREAKPOINTS ------------------------------ */
+
+@mixin at-small {
+  @media only screen and (min-width: 36rem /* 576px */) {
+    @content;
+  }
+}
+
+@mixin at-medium {
+  @media only screen and (min-width: 48rem /* 768px */) {
+    @content;
+  }
+}
+
+@mixin at-large {
+  @media only screen and (min-width: 62rem /* 992px */) {
+    @content;
+  }
+}
+
+/**
+ * For a mobile-first approach, prefer the at-[size] mixins and only use these
+ * when necessary.
+ */
+@mixin until-small {
+  @media only screen and (max-width: 36rem /* 576px */) {
+    @content;
+  }
+}
+
+@mixin until-medium {
+  @media only screen and (max-width: 48rem /* 768px */) {
+    @content;
+  }
+}
+
+@mixin until-large {
+  @media only screen and (max-width: 62rem /* 992px */) {
+    @content;
+  }
+}
+
+@mixin until-width($width) {
+  @media only screen and (min-width: $width) {
+    @content;
+  }
+}
+
+
+
+/* --------------------------------- SHAPES --------------------------------- */
+@mixin clip-shape($shape) {
+  $shapes: (
+    "chevron": polygon(50% 70%, 100% 0%, 99% 30%, 50% 100%, 1% 30%, 0% 0%),
+    "plus": polygon(0 35%, 35% 35%, 35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0 65%)
+  );
+
+  clip-path: map.get($shapes, $shape);
+}
+
+/**
+ * From Bourbon library
+ * https://github.com/thoughtbot/bourbon/
+ */
+@mixin triangle(
+  $direction,
+  $width,
+  $height,
+  $color
+) {
+  @if not map.index(
+    "up" "up-right" "right" "down-right" "down" "down-left" "left" "up-left",
+    $direction
+  ) {
+    @error "Direction must be `up`, `up-right`, `right`, `down-right`, " +
+      "`down`, `down-left`, `left` or `up-left`.";
+  } @else if not ((meta.type-of($color) == color) or ($color == "currentColor")) {
+    @error "`#{$color}` is not a valid color for the `$color` argument in " +
+      "the `triangle` mixin.";
+  } @else {
+    border-style: solid;
+    height: 0;
+    width: 0;
+
+    @if $direction == "up" {
+      border-color: transparent transparent $color;
+      border-width: 0 ($width / 2) $height;
+    } @else if $direction == "up-right" {
+      border-color: transparent $color transparent transparent;
+      border-width: 0 $width $width 0;
+    } @else if $direction == "right" {
+      border-color: transparent transparent transparent $color;
+      border-width: ($height / 2) 0 ($height / 2) $width;
+    } @else if $direction == "down-right" {
+      border-color: transparent transparent $color;
+      border-width: 0 0 $width $width;
+    } @else if $direction == "down" {
+      border-color: $color transparent transparent;
+      border-width: $height ($width / 2) 0;
+    } @else if $direction == "down-left" {
+      border-color: transparent transparent transparent $color;
+      border-width: $width 0 0 $width;
+    } @else if $direction == "left" {
+      border-color: transparent $color transparent transparent;
+      border-width: ($height / 2) $width ($height / 2) 0;
+    } @else if $direction == "up-left" {
+      border-color: $color transparent transparent;
+      border-width: $width $width 0 0;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "endOfLine": "auto",
+  "printWidth": 100,
+  "singleQuote": true,
+  "objectWrap": "preserve",
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "parser": "angular"
+      }
+    }
+  ]
+}

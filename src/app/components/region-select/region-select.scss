@@ -1,0 +1,118 @@
+:host {
+  position: relative;
+  --letter-spacing: var(--letter-spacing-header);
+  --accent-color: var(--rating-text-color);
+}
+
+.custom-select-wrapper {
+  position: relative;
+  width: fit-content;
+}
+
+.region-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  border-block-end: 1px dashed var(--accent-color);
+  color: var(--text-light);
+  font-size: var(--font-size-xxs);
+  letter-spacing: var(--letter-spacing);
+  text-transform: uppercase;
+  transition: color 0.1s;
+  cursor: pointer;
+
+  &:hover,
+  &[aria-expanded="true"] {
+    color: var(--accent-color);
+  }
+
+  .region-chevron {
+    height: 5px;
+    width: 8px;
+    transition: rotate .15s;
+  }
+
+  &[aria-expanded="true"] {
+    .region-chevron {
+      rotate: 180deg;
+    }
+  }
+
+}
+
+.region-dropdown {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: calc(100% + 12px);
+  flex-direction: column;
+  width: fit-content;
+  min-width: 230px;
+  max-height: 300px;
+  background: #fff;
+  border: var(--border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  z-index: 500;
+  overflow-y: auto;
+
+  /* Use px -- see region-select.ts -> maintainScrollVisibility()  */
+  padding: 6px;
+
+  &.is-open {
+    display: flex;
+  }
+}
+
+.group-divider {
+  height: .9px; // 1px sometimes rendering as 2px
+  display: block;
+  background: var(--border-color);
+  margin: 5px 6px;
+}
+
+.group-label {
+  display: block;
+  font-size: var(--font-size-xxs);
+  letter-spacing: var(--letter-spacing);
+  text-transform: uppercase;
+  color: var(--text-light);
+  padding: 8px 10px 3px;
+}
+
+.region-option {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-lighter);
+  font-size: var(--font-size-s);
+  padding: 7px 10px;
+  border-radius: 7px;
+  transition: background 0.1s, color 0.1s;
+}
+
+.region-option:hover {
+  background-color: var(--bg-color);
+  color: var(--text);
+}
+
+.region-option.is-active {
+  background-color: var(--list-active-color);
+  color: var(--text);
+}
+
+.check {
+  visibility: hidden;
+}
+
+.region-option.is-selected {
+  color: var(--accent-color);
+  font-weight: 600;
+
+  .check {
+    visibility: visible;
+  }
+}

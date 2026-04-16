@@ -1,0 +1,69 @@
+:host {
+  display: block;
+  position: relative;
+  padding-block: 16px;
+}
+
+.chart-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background-color: #fff;
+  border: var(--border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 18px 20px 21px;
+  line-height: 1;
+  letter-spacing: .02em;
+  color: var(--text-light);
+}
+
+.is-loading {
+  opacity: .5;
+  filter: blur(3px);
+  /* prevent tooltip on hover when loading */
+  pointer-events: none;
+}
+
+.chart-title {
+  display: block;
+  width: fit-content;
+  color: var(--text-lightest);
+  font-size: var(--font-size-xxs);
+  letter-spacing: var(--letter-spacing-header);
+  text-transform: uppercase;
+  margin-block-end: 16px;
+  margin-inline-end: 0;
+}
+
+/* Tooltip is a child of the echart component */
+::ng-deep {
+  /* Echarts removes inline styles when the tooltip is not showing. 
+     By targeting this we can avoid applying styles when it's 'hidden', 
+     which can cause visual bugs like box shadow showing when it shouldn't  */
+  .intensity-chart-tooltip[style] {
+    border-radius: var(--border-radius) !important;
+    border: var(--border) !important;
+    box-shadow: var(--box-shadow) !important;
+    font-size: var(--font-size-xs) !important;
+  }
+
+  .intensity-chart-tooltip[style]:empty {
+    display: none;
+  }
+
+  .tool-tip__data {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-block-start: 8px;
+  }
+
+  .tool-tip__value {
+    margin-inline-start: 6px;
+  }
+}

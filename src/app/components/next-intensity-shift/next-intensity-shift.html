@@ -1,0 +1,22 @@
+@if (intensityState$ | async; as intensity ) {
+  <div class="wrapper">
+    <svg class="message-icon rating--{{ intensity.currentIntensity.index | kebabCase}}" width="16" height="16" viewBox="0 0 16 16"
+    fill="none">
+        <circle cx="8" cy="8" r="7" stroke="#16a34a" stroke-width="1.5"/>
+        <path d="M8 7.5v3.5M8 5v.01" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+
+  @if (intensity.hoursTillNext; as hours ) {
+  <p>
+    Carbon intensity will remain {{ intensity.uiIndexText }} for another {{ hours }} hours.
+  </p>
+  } @else {
+  <p>
+    Carbon intensity will remain {{ intensity.uiIndexText }} for the next 24 hours.
+  </p>
+}
+
+</div>
+}
+
+

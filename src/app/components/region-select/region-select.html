@@ -1,0 +1,61 @@
+<div class="custom-select-wrapper">
+  <div #comboBox
+       class="region-box"
+       id="regionBtn"
+       role="combobox"
+       aria-controls="regionDropdown"
+       aria-haspopup="listbox"
+       [aria-expanded]="isOpen()"
+       [aria-activedescendant]="isOpen()
+        ? `region-${activeRegionIndex()}`
+        : null"
+       (click)="toggleDropdown()"
+       (keydown)="onRegionControlKeyPress($event)"
+       tabindex="0">
+    <span id="regionName">{{ selectedRegion().name }}</span>
+    <svg class="region-chevron"
+         width="8"
+         height="5"
+         viewBox="0 0 8 5"
+         fill="none"
+         aria-hidden="true">
+      <path d="M1 1l3 3 3-3"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+    </svg>
+  </div>
+  <div #listbox
+       class="region-dropdown"
+       id="regionDropdown"
+       role="listbox"
+       tabindex="-1"
+       [class.is-open]="isOpen()">
+  @if (isOpen()) {
+    @for (group of regionGroups; track $index) {
+      @if (group.country) {
+        <!-- Hide from screenreaders -- they won't be read out anyway, and on 
+             Safari VoiceOver on Mac they increase the count of the menu items,
+             which may be confusing -->
+        <div class="group-divider" aria-hidden="true">&nbsp;</div>
+        <span class="group-label" aria-hidden="true">{{ group.country }}</span>
+      }
+    @for (region of group.regions; track $index) {
+    <div id="region-{{ region.flatIndex }}"
+         (click)="optionClicked(region)"
+         class="region-option"
+         [class.is-selected]="region.flatIndex ===
+          selectedRegion().flatIndex"
+         [class.is-active]="activeRegionIndex() ===
+          region.flatIndex"
+         role="option"
+         [attr.data-option-num]="region.flatIndex"
+         [attr.data-region-name]="region.name">
+      <span class="check" aria-hidden="true">✓</span>{{ region.name }}
+    </div>
+    }
+    }
+    }
+  </div>
+</div>
