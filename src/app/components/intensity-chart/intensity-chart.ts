@@ -14,10 +14,6 @@ import { escapeHtml, toSentenceCase } from '../../utils/general-utils';
   selector: 'app-intensity-chart',
   imports: [AsyncPipe, LineChartComponent],
   templateUrl: './intensity-chart.html',
-  host: {
-    /* Chart screenreader UX not great out-of-the-box, better to hide it */
-    'aria-hidden': 'true'
-  },
   styleUrl: './intensity-chart.scss',
 })
 export class IntensityChart {
@@ -144,7 +140,7 @@ export class IntensityChart {
           },
         },
         axisTick: { interval: 0 }
-        
+
       },
       yAxis: {
         type: 'value',
@@ -192,7 +188,7 @@ export class IntensityChart {
           },
           // overlap to join series lines
           data: [
-            graphData.series[0][graphData.series[0].length - 1], 
+            graphData.series[0][graphData.series[0].length - 1],
             ...graphData.series[1]
           ],
           showSymbol: false
