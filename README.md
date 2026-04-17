@@ -1,9 +1,10 @@
 # Current Carbon Intensity
+https://current-carbon-intensity.vercel.app
 
 ## Stack
-Angular
-Apache Echarts
-Carbon Intensity API
+- Angular
+- Apache Echarts
+- Carbon Intensity API
 
 ## Overview
 Displays the current carbon intensity, and some forecast information to help plan energy consumption. If levels are low, it tells you how long they are forecasted to remain there. If they are moderate or higher, it tells you how long until they drop. 
@@ -12,16 +13,19 @@ Also shows a chart of carbon intensity levels over a 48-window (last and next 24
 
 ## Features
 Custom drop-down menu, based on the WCAG pattern.
+
 Aria live regions to surface region change to screen readers.
 
 Data is "live" and will update automatically, but the endpoint is only updated every 30 minutes.
 
 ## Why
 Wanted a little demo project to brush up on Angular and check out the newer features.
+
 Also wanted to experiment with implementing a custom dropdrown, following the WCAG pattern. It was fun translating that into Angular.
 
 ## Challenges
 Rolling your own dropdown really makes you appreciate how much the browser gives you for free.
+
 Initially used 3 separate api calls to grab current intensity, past 24 hour data, and future 24 hour forecast. This resulted in some janky loading when switching regions, adjusting to use a single API call improved this.
 
 ## Known Issues
