@@ -115,10 +115,16 @@ export class RegionSelect {
       /* Handle events when open */
     } else if (this.isOpen()) {
       if (event.key == 'ArrowDown') {
-        this.activeRegionIndex.update((value) => value == this.maxIndex ? this.maxIndex : value + 1);
+        this.activeRegionIndex.update((value) => Math.min(this.maxIndex, value + 1));
         this.maintainScrollVisibility();
       } else if (event.key == 'ArrowUp') {
-        this.activeRegionIndex.update((value) => value == 0 ? 0 : value - 1);
+        this.activeRegionIndex.update((value) => Math.max(0, value - 1));
+        this.maintainScrollVisibility()
+      } else if (event.key == 'PageDown') {
+        this.activeRegionIndex.update((value) => Math.min(this.maxIndex, value + 10));
+        this.maintainScrollVisibility();
+      } else if (event.key == 'PageUp') {
+        this.activeRegionIndex.update((value) => Math.max(0, value - 10));
         this.maintainScrollVisibility();
       } else if (event.key == 'Home') {
         this.activeRegionIndex.set(0);
